@@ -1,0 +1,70 @@
+version: "3.7"
+networks:
+  rabbitmq-net:
+    name: rabbitmq-net
+    driver: bridge
+
+services:
+  rabbitmq01:
+    image: rabbitmq:${RABBITMQ_VERSION}
+    container_name: rabbitmq01
+    hostname: mq1
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ${DATA_DIR}/rabbitmq/${CLUSTER_DIR}/rabbitmq01/data:/var/lib/rabbitmq  # 数据目录
+      - ${SERVICES_DIR}/rabbitmq/${CLUSTER_DIR}/rabbitmq01/conf.d/rabbitmq.conf:/etc/rabbitmq/conf.d/rabbitmq.conf:rw # 配置文件
+      - ${SERVICES_DIR}/rabbitmq/${CLUSTER_DIR}/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie # cookie文件  启动完后报错的话需要进去容器里面执行：chmod 600 /var/lib/rabbitmq/.erlang.cookie
+      - ${SERVICES_DIR}/rabbitmq/${CLUSTER_DIR}/plugins-my:/opt/rabbitmq/plugins-my:rw  # 自定义插件存放目录
+      - ${LOG_DIR}/rabbitmq/${CLUSTER_DIR}/rabbitmq01/logs:/var/log/rabbitmq:rw  # 日志目录
+    environment:
+      TZ: "Asia/Shanghai"
+      RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER}"
+      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
+    networks:
+      - rabbitmq-net
+
+#  rabbitmq02:
+#    image: rabbitmq:${RABBITMQ_VERSION}
+#    container_name: rabbitmq02
+#    hostname: mq2
+#    restart: always
+#    ports:
+#      - "6672:5672"
+#      - "25672:15672"
+#    volumes:
+#      - ${DATA_DIR}/rabbitmq/${CLUSTER_DIR}/rabbitmq02/data:/var/lib/rabbitmq  # 数据目录
+#      - ${SERVICES_DIR}/rabbitmq/${CLUSTER_DIR}/rabbitmq02/conf.d/rabbitmq.conf:/etc/rabbitmq/conf.d/rabbitmq.conf:rw # 配置文件
+#      - ${SERVICES_DIR}/rabbitmq/${CLUSTER_DIR}/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie # cookie文件  启动完后报错的话需要进去容器里面执行：chmod 600 /var/lib/rabbitmq/.erlang.cookie
+#      - ${SERVICES_DIR}/rabbitmq/${CLUSTER_DIR}/plugins-my:/opt/rabbitmq/plugins-my:rw  # 自定义插件存放目录
+#      - ${LOG_DIR}/rabbitmq/${CLUSTER_DIR}/rabbitmq02/logs:/var/log/rabbitmq:rw  # 日志目录
+#    environment:
+#      TZ: "Asia/Shanghai"
+#      RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER}"
+#      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
+#    networks:
+#      - rabbitmq-net
+#
+#  rabbitmq03:
+#    image: rabbitmq:${RABBITMQ_VERSION}
+#    container_name: rabbitmq03
+#    hostname: mq3
+#    restart: always
+#    ports:
+#      - "7672:5672"
+#      - "35672:15672"
+#    volumes:
+#      - ${DATA_DIR}/rabbitmq/${CLUSTER_DIR}/rabbitmq03/data:/var/lib/rabbitmq  # 数据目录
+#      - ${SERVICES_DIR}/rabbitmq/${CLUSTER_DIR}/rabbitmq03/conf.d/rabbitmq.conf:/etc/rabbitmq/conf.d/rabbitmq.conf:rw # 配置文件
+#      - ${SERVICES_DIR}/rabbitmq/${CLUSTER_DIR}/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie # cookie文件  启动完后报错的话需要进去容器里面执行：chmod 600 /var/lib/rabbitmq/.erlang.cookie
+#      - ${SERVICES_DIR}/rabbitmq/${CLUSTER_DIR}/plugins-my:/opt/rabbitmq/plugins-my:rw  # 自定义插件存放目录
+#      - ${LOG_DIR}/rabbitmq/${CLUSTER_DIR}/rabbitmq03/logs:/var/log/rabbitmq:rw  # 日志目录
+#    environment:
+#      TZ: "Asia/Shanghai"
+#      RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER}"
+#      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
+#    networks:
+#      - rabbitmq-net
+
